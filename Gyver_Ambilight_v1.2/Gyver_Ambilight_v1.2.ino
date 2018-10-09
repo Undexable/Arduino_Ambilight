@@ -6,6 +6,7 @@
 //----------------------НАСТРОЙКИ-----------------------
 #define NUM_LEDS 98          // число светодиодов в ленте
 #define DI_PIN 13            // пин, к которому подключена лента
+#define R_PIN 6              // пин, к которому подключен фоторезистор (если используется автоматическая подстройка яркости)
 #define OFF_TIME 10          // время (секунд), через которое лента выключится при пропадаании сигнала
 
 #define start_flashes 0      // проверка цветов при запуске (1 - включить, 0 - выключить)
@@ -60,7 +61,7 @@ void loop() {
   if (auto_bright) {                         // если включена адаптивная яркость
     if (millis() - bright_timer > 100) {     // каждые 100 мс
       bright_timer = millis();               // сброить таймер
-      new_bright = map(analogRead(6), 0, bright_constant, min_bright, max_bright);   // считать показания с фоторезистора, перевести диапазон
+      new_bright = map(analogRead(R_PIN), 0, bright_constant, min_bright, max_bright);   // считать показания с фоторезистора, перевести диапазон
       new_bright = constrain(new_bright, min_bright, max_bright);
       new_bright_f = new_bright_f * coef + new_bright * (1 - coef);
       LEDS.setBrightness(new_bright_f);      // установить новую яркость
